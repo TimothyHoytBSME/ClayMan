@@ -69,3 +69,25 @@ add_custom_command(
     ${EXAMPLES_DIR}/separate-sources-example/resources
     $<TARGET_FILE_DIR:separate-sources-example>/resources
 )
+
+#sdl2 example
+set(SDL2_STATIC_LIB ON)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_image REQUIRED)
+
+add_executable(sdl2-example ${EXAMPLES_DIR}/sdl2-example/sdl2-example.cpp clayman.cpp)
+set_target_properties(sdl2-example PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXAMPLES_OUTPUT_DIR}/sdl2-example)
+target_link_libraries(sdl2-example PRIVATE 
+    SDL2::SDL2main
+    SDL2::SDL2-static
+    SDL2_ttf::SDL2_ttf-static
+    SDL2_image::SDL2_image-static
+)
+
+add_custom_command(
+    TARGET sdl2-example POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${EXAMPLES_DIR}/sdl2-example/resources
+    $<TARGET_FILE_DIR:sdl2-example>/resources
+)
