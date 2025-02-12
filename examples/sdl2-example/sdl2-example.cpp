@@ -117,7 +117,7 @@ void myLayout(ClayMan& clayMan){
                     .padding = clayMan.padAll(16),
                     .childAlignment = clayMan.centerXY()
                 },
-                .backgroundColor = {0,0,0,125},
+                .backgroundColor = {0,0,0,255},//{0,0,0,125},
                 .cornerRadius = {8,8,8,8},
                 .border = {
                     .color = {123,123,0,255},
@@ -130,7 +130,7 @@ void myLayout(ClayMan& clayMan){
                         .layout = {
                             .padding = clayMan.padAll(16)
                         },
-                        .backgroundColor = {255,255,255,123}
+                        .backgroundColor = {255,255,255,255}//{255,255,255,123}
                     },
                     [&]{
                         clayMan.textElement("This element was made using the lambda method", textConfig);
