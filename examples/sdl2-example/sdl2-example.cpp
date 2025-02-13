@@ -108,7 +108,7 @@ void myLayout(ClayMan& clayMan){
         }
         clayMan.closeElement(); //we manually close the "ManualElement" since closeElement() was used
 
-
+        uint16_t bw = 8;
         clayMan.element(
             {
                 .id = clayMan.hashID("AnotherElement"),
@@ -118,10 +118,10 @@ void myLayout(ClayMan& clayMan){
                     .childAlignment = clayMan.centerXY()
                 },
                 .backgroundColor = {0,0,0,255},//{0,0,0,125},
-                .cornerRadius = {8,8,8,8},
+                .cornerRadius = {1000,1000,1000,1000},
                 .border = {
                     .color = {123,123,0,255},
-                    .width = {5,5,5,5,0}
+                    .width = {bw, bw, bw, bw,0}
                 }
             },
             [&]{
