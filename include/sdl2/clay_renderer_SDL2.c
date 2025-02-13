@@ -6,10 +6,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define DEG2RAD (M_PI / 180.0)
-
 #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+    #define M_PI 3.14159
 #endif
 
 #define CLAY_COLOR_TO_SDL_COLOR_ARGS(color) color.r, color.g, color.b, color.a
@@ -54,8 +52,6 @@ static void SDL_RenderFillRoundedRect(SDL_Renderer* renderer, const SDL_FRect re
             .a = (Uint8)_color.a,
     };
 
-    const SDL_Color debugColor = {255, 0, 0, 255};
-
     int indexCount = 0, vertexCount = 0;
 
     const float maxRadius = SDL_min(rect.w, rect.h) / 2.0f;
@@ -67,10 +63,10 @@ static void SDL_RenderFillRoundedRect(SDL_Renderer* renderer, const SDL_FRect re
     int indices[512];
 
     //define center rectangle
-    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + clampedRadius, rect.y + clampedRadius}, debugColor, {0, 0} }; //0 center TL
-    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + rect.w - clampedRadius, rect.y + clampedRadius}, debugColor, {1, 0} }; //1 center TR
-    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + rect.w - clampedRadius, rect.y + rect.h - clampedRadius}, debugColor, {1, 1} }; //2 center BR
-    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + clampedRadius, rect.y + rect.h - clampedRadius}, debugColor, {0, 1} }; //3 center BL
+    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + clampedRadius, rect.y + clampedRadius}, color, {0, 0} }; //0 center TL
+    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + rect.w - clampedRadius, rect.y + clampedRadius}, color, {1, 0} }; //1 center TR
+    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + rect.w - clampedRadius, rect.y + rect.h - clampedRadius}, color, {1, 1} }; //2 center BR
+    vertices[vertexCount++] = (SDL_Vertex){ {rect.x + clampedRadius, rect.y + rect.h - clampedRadius}, color, {0, 1} }; //3 center BL
 
     indices[indexCount++] = 0;
     indices[indexCount++] = 1;
@@ -152,7 +148,7 @@ static void SDL_RenderFillRoundedRect(SDL_Renderer* renderer, const SDL_FRect re
 }
 
 //all rendering is performed by a single SDL call, using twi sets of arcing triangles, inner and outer, that fit together; along with two tringles to fill the end gaps.
-void SDL_RenderCornerBorder(SDL_Renderer *renderer, Clay_BoundingBox* boundingBox, Clay_BorderRenderData* config, int cornerIndex, SDL_Color color){
+void SDL_RenderCornerBorder(SDL_Renderer *renderer, Clay_BoundingBox* boundingBox, Clay_BorderRenderData* config, int cornerIndex, Clay_Color _color){
     /////////////////////////////////
     //The arc is constructed of outer triangles and inner triangles (if needed).
     //First three vertices are first outer triangle's vertices
@@ -162,6 +158,12 @@ void SDL_RenderCornerBorder(SDL_Renderer *renderer, Clay_BoundingBox* boundingBo
     //The final two vertices are the missing vertices for the first and last inner triangles (if needed)
     //Everything is in clockwise order (CW).
     /////////////////////////////////
+    const SDL_Color color = (SDL_Color) {
+        .r = (Uint8)_color.r,
+        .g = (Uint8)_color.g,
+        .b = (Uint8)_color.b,
+        .a = (Uint8)_color.a,
+    };
 
     float centerX, centerY, outerRadius, clampedRadius, startAngle, borderWidth;
     const float maxRadius = SDL_min(boundingBox->width, boundingBox->height) / 2.0f;
@@ -344,8 +346,7 @@ static void Clay_SDL2_Render(SDL_Renderer *renderer, Clay_RenderCommandArray ren
             }
             case CLAY_RENDER_COMMAND_TYPE_BORDER: {
                 Clay_BorderRenderData *config = &renderCommand->renderData.border;
-                SDL_Color color = {(Uint8)config->color.r, (Uint8)config->color.g, (Uint8)config->color.b, (Uint8)config->color.a};
-                SDL_SetRenderDrawColor(renderer, CLAY_COLOR_TO_SDL_COLOR_ARGS(color));
+                SDL_SetRenderDrawColor(renderer, CLAY_COLOR_TO_SDL_COLOR_ARGS(config->color));
 
                 if(boundingBox.width > 0 & boundingBox.height > 0){
                     const float maxRadius = SDL_min(boundingBox.width, boundingBox.height) / 2.0f;
@@ -399,19 +400,19 @@ static void Clay_SDL2_Render(SDL_Renderer *renderer, Clay_RenderCommandArray ren
     
                     //corner index: 0->3 topLeft -> CW -> bottonLeft
                     if (config->width.top > 0 & config->cornerRadius.topLeft > 0) {
-                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 0, color);
+                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 0, config->color);
                     }
 
                     if (config->width.top > 0 & config->cornerRadius.topRight> 0) {
-                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 1, color);
+                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 1, config->color);
                     }
 
                     if (config->width.bottom > 0 & config->cornerRadius.bottomLeft > 0) {
-                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 2, color);
+                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 2, config->color);
                     }
 
                     if (config->width.bottom > 0 & config->cornerRadius.bottomLeft > 0) {
-                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 3, color);
+                        SDL_RenderCornerBorder(renderer, &boundingBox, config, 3, config->color);
                     }
                 }
 

@@ -18,6 +18,7 @@
 //User layout callback function, do not call Clay_BeginLayout() or Clay_EndLayout()
 void myLayout(ClayMan& clayMan){
     static std::string theText = "Click the button to change the text.";
+    uint16_t bw = 5;
 
     //A reusable configuration
     Clay_TextElementConfig textConfig = {
@@ -101,14 +102,17 @@ void myLayout(ClayMan& clayMan){
                     }
                 },
                 .backgroundColor =  (Clay_Hovered()? (Clay_Color){200,200,200,255}: (Clay_Color){100,100,100,255}),
-                .cornerRadius = 10
+                .cornerRadius = {10,10,10,10},
+                .border = {
+                    .color = {123,123,0,255},
+                    .width = {bw, bw, bw, bw,0}
+                }
             }){
                 CLAY_TEXT(CLAY_STRING("This element was made with the standard Clay macros inside a lambda element"), CLAY_TEXT_CONFIG(textConfig));
             }
         }
         clayMan.closeElement(); //we manually close the "ManualElement" since closeElement() was used
 
-        uint16_t bw = 8;
         clayMan.element(
             {
                 .id = clayMan.hashID("AnotherElement"),
@@ -118,7 +122,7 @@ void myLayout(ClayMan& clayMan){
                     .childAlignment = clayMan.centerXY()
                 },
                 .backgroundColor = {0,0,0,255},//{0,0,0,125},
-                .cornerRadius = {1000,1000,1000,1000},
+                .cornerRadius = {20,20,20,20},
                 .border = {
                     .color = {123,123,0,255},
                     .width = {bw, bw, bw, bw,0}
@@ -130,7 +134,7 @@ void myLayout(ClayMan& clayMan){
                         .layout = {
                             .padding = clayMan.padAll(16)
                         },
-                        .backgroundColor = {255,255,255,255}//{255,255,255,123}
+                        .backgroundColor = {0,0,0,255}//{255,255,255,123}
                     },
                     [&]{
                         clayMan.textElement("This element was made using the lambda method", textConfig);
