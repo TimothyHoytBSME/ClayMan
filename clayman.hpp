@@ -247,7 +247,7 @@ class ClayMan {
         uint32_t windowWidth;
         uint32_t windowHeight;
         uint32_t framecount = 0;
-        std::chrono::_V2::system_clock::time_point start = std::chrono::high_resolution_clock::now();
+        std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
         static constexpr size_t maxStringArenaSize = 100000; 
 
