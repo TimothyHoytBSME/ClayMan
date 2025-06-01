@@ -1,5 +1,6 @@
 #include "../../clayman.hpp"
 #include "../../include/raylib/clay_renderer_raylib.c"
+#include "../../include/clay.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -449,7 +450,7 @@ void myLayout(){
                                 .layoutDirection = CLAY_TOP_TO_BOTTOM 
                             },
                             .backgroundColor = appData.colors.gray_med,
-                            .scroll = {.vertical = true}
+                            .clip = {.vertical = true} //TODO: call Clay_GetScrollOffset() internally for each child
                         },
                         [&]{
                             if(appData.selectedDocumentIndex >= appData.documents.size()) appData.selectedDocumentIndex = appData.documents.size() - 1;

@@ -9,7 +9,7 @@
 - [How To Use ClayMan (With Raylib Renderer)](#how-to-use-clayman-with-raylib-renderer)
 - [Examples And Other Renderers](#examples-and-other-renderers)
 - [Events](#events)
-- [Element Configuration](#element-parameters)
+- [Element Configuration](#element-configuration)
 - [Advanced Use](#advanced-use)
 - [API](#api)
 - [Final Notes](#final-notes)
@@ -312,7 +312,7 @@ Other events will need to be handled/created with other means, and are not cover
 
 ## Element Configuration
 
-In Clay, the `CLAY` macro takes a single optional configuration. Optional sub-configurations such as layout, scroll, floating, and border all have their own struct types. In ClayMan, the same configuration is optionally passed directly into `element` or `openElement`. The parameters in the configurations have a set order but are all optional. See Clay's [Clay_ElementDeclaration](https://github.com/nicbarker/clay/blob/main/README.md#clay_elementdeclaration) section in its readme for more information.
+In Clay, the `CLAY` macro takes a single optional configuration. Optional sub-configurations such as layout, clip, floating, and border all have their own struct types. In ClayMan, the same configuration is optionally passed directly into `element` or `openElement`. The parameters in the configurations have a set order but are all optional. See Clay's [Clay_ElementDeclaration](https://github.com/nicbarker/clay/blob/main/README.md#clay_elementdeclaration) section in its readme for more information. NOTE: For `clip` configuration, `childOffset` will be ignored in ClayMan, and will be replaced with internal scroll offsets automatically if either vertical or horizontal are set. If you are in need of clip without scroll, or wish to handle offsets externally, this is currently unsupported in ClayMan. Please submit an issue or PR if you would like to see this changed.
 
 The `CLAY_TEXT` macro takes its own `Clay_TextElementConfig` and has no children. ClayMan captures this as its own function, `textElement`. See [Strings](#strings) section for an example.
 
@@ -602,3 +602,5 @@ Since this library is just a wrapper for Clay; any original clay structs, macros
     - Major update to match new CLAY macro with Clay_ElementDeclaration. Simplified API, added an example, and updated examples.
 - February 11, 2025
     - Split ClayMan into header and source to allow inclusion in multiple sources. Added an example.
+- June 1, 2025
+    - Clay scroll config was replaced with clip config. For ClayMan, clip should be treated as scroll for now, just declare horizontal or vertical as true, any childOffset parameter will be replaced with scroll offsets internally. If this is a problem, please submit an issue.

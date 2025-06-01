@@ -85,7 +85,8 @@ Clay_RenderCommandArray ClayMan::endLayout(){
 
 void ClayMan::element(){
     openElement();
-    applyElementConfigs({});
+    Clay_ElementDeclaration configs;
+    applyElementConfigs(configs);
     closeElement();  
 }
 
@@ -107,7 +108,8 @@ void ClayMan::element(Clay_ElementDeclaration configs){
 
 void ClayMan::element(std::function<void()> childLambda){
     openElement();
-    applyElementConfigs({});
+    Clay_ElementDeclaration configs;
+    applyElementConfigs(configs);
     if(childLambda != nullptr){
         childLambda();
     }
@@ -262,7 +264,13 @@ Clay_String ClayMan::toClayString(const std::string& str){
     return cs;
 }
 
-void ClayMan::applyElementConfigs(const Clay_ElementDeclaration& configs){
+void ClayMan::applyElementConfigs(Clay_ElementDeclaration& configs){
+
+    //This may need improved if clipping is used without scrolling
+    if(configs.clip.horizontal || configs.clip.vertical){
+        configs.clip.childOffset = Clay_GetScrollOffset();
+    }
+
     Clay__ConfigureOpenElement((Clay__Clay_ElementDeclarationWrapper {configs}).wrapped);
 }
 

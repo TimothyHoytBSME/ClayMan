@@ -283,7 +283,7 @@ class ClayMan {
             return startPtr;
         }
 
-        void applyElementConfigs(const Clay_ElementDeclaration& configs);
+        void applyElementConfigs(Clay_ElementDeclaration& configs);
 
         void closeAllElements();
 

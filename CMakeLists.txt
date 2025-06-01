@@ -51,7 +51,7 @@ file(COPY ${EXAMPLES_DIR}/separate-sources-example/resources DESTINATION ${EXAMP
 #end separate sources example
 
 #sdl2 example
-set(SDL2_STATIC_LIB ON)
+# set(SDL2_STATIC_LIB ON)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
